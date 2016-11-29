@@ -1,26 +1,109 @@
 <!DOCTYPE html>
-<html>
+<html manifest="manifest.appcache">
 
-  <head>
-    <title>NodeJS Starter Application</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="stylesheets/style.css">
-  </head>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 
-  <body>
-    <table>
-      <tr>
-        <td style= "width:30%;">
-          <img class = "newappIcon" src="images/newapp-icon.png">
-        </td>
-        <td>
-          <h1 id="message">Hello World!</h1>
-          <p class='description'></p> Thanks for creating a <span class = "blue">NodeJS Starter Application</span>.
-        </td>
-      </tr>
-    </table>
-  </body>
+  	<title>IBM Verse</title>
 
+  	<link rel="apple-touch-icon" href="img/bluemix.png">
+  	<meta name="apple-mobile-web-app-capable" content="yes">
+  	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  	<meta name="viewport" content="user-scalable=no, width=device-width">
+
+  	<link href="css/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+	<div id="loader-wrapper">
+	    <div id="loader"></div>
+	    <div id="loadlogo"></div>
+	    <div class="loader-section section-left"></div>
+	    <div class="loader-section section-right"></div>
+	</div>
+
+	<img src="screens/1.png" style="width: 1024px; height: 768px;" id="screen" usemap="#clickmap">
+		<map name="clickmap">
+
+		  <area shape="rect" coords="50,0,1024,768" href="javascript:nextScreen();" alt="Next">
+		  <area shape="rect" coords="0,284,50,768" href="javascript:previousScreen();" alt="Previous">
+
+		</map>
+	</img>
+
+
+	<script src="js/jquery-2.1.3.min.js"></script>
+
+	<script type="text/javascript">
+	  function logEvent(event) {
+	    console.log(event.type);
+	  }
+
+	  window.applicationCache.addEventListener('checking',logEvent,false);
+	  window.applicationCache.addEventListener('noupdate',logEvent,false);
+	  window.applicationCache.addEventListener('downloading',logEvent,false);
+	  window.applicationCache.addEventListener('cached',logEvent,false);
+	  window.applicationCache.addEventListener('updateready',logEvent,false);
+	  window.applicationCache.addEventListener('obsolete',logEvent,false);
+	  window.applicationCache.addEventListener('error',logEvent,false);
+
+	  function updateSite(event) {
+	    window.applicationCache.swapCache();
+	    readyToUse();
+	  }
+	  window.applicationCache.addEventListener('updateready', updateSite, false);
+
+	  function readyToUse() {
+	    //$('#loading').hide();
+	    $('body').addClass('loaded');
+	    //$('#loader-wrapper').hide();
+	  }
+	  window.applicationCache.addEventListener('cached', readyToUse, false);
+	  window.applicationCache.addEventListener('noupdate', readyToUse, false);
+	</script>
+
+	<script type="text/javascript">
+	  var currentScreen = 1;
+	  var numberOfScreens = 19;
+	  var lastScreen = null;
+
+	  function nextScreen() {
+	    var nextScreen = currentScreen + 1;
+	    if(nextScreen <= numberOfScreens) {
+	      showScreen(nextScreen);
+	      currentScreen = nextScreen;
+	    } else {
+	      restart();
+	    }
+	  }
+
+	  function previousScreen() {
+	    if(lastScreen) {
+	      currentScreen = lastScreen;
+	      showScreen(currentScreen);
+	      lastScreen = null;
+	    } else {
+	      var previousScreen = currentScreen - 1;
+	      if(previousScreen >= 1) {
+	        showScreen(previousScreen);
+	        currentScreen = previousScreen;
+	      }
+	    }
+	  }
+
+	  function restart() {
+	    lastScreen = currentScreen;
+	    currentScreen = 1;
+	    showScreen(currentScreen);
+	  }
+
+	  function showScreen(s) {
+	    var src = 'screens/' + s + '.png';
+	    $('#screen').attr('src', src);
+	  }
+	</script>
+
+</body>
 </html>
+ 
