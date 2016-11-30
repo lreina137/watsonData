@@ -1,7 +1,8 @@
 CACHE MANIFEST
-# Version: 52
+# Version: 7
 
 CACHE:
+index.html
 js/jquery-2.1.3.min.js
 css/style.css
 img/bluemix.png
